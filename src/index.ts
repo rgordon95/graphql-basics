@@ -24,6 +24,7 @@ type Query {
     greeting(name: String): String!
     me: User!
     post: Post!
+    add(a: Float!, b: Float!): Float!
 }
 
 
@@ -65,6 +66,9 @@ const resolvers = {
                  published: true,
                  id: '1'
             }
+         },
+         add(p, args) {
+            return args.a + args.b
          },
     }
 }
