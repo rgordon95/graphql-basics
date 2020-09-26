@@ -24,7 +24,7 @@ type Query {
     greeting(name: String): String!
     me: User!
     post: Post!
-    add(a: Float!, b: Float!): Float!
+    add(numbers: [Float!]): Float!
     grades: [Int!]!
 }
 
@@ -69,7 +69,13 @@ const resolvers = {
             }
          },
          add(p, args) {
-            return args.a + args.b
+             if (args.numbers.length === 0 ) {
+                return 0;
+            }
+
+            return args.numbers.reduce((accumulator, currentValue) => {
+                return accumulator + currentValue
+            });
          },
          grades(p, args, ctx, info) {
             return [99, 100, 80, 92, 102]
