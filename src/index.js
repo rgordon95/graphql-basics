@@ -6,12 +6,30 @@ console.log(locales.userMessaging.getGreeting('admin'));
 
 // Type Definitions (schema)
 
+
+/* 
+Scalar Types
+
+ID
+Boolean
+String
+Int
+Float,
+
+*/
+
 const typeDefs = `
   type Query {
-      hello: String!
+      id: ID!
       name: String!
-      email: String!
-      location: String
+      age: Int!
+      employed: Boolean!
+      gpa: Float
+      title: String!
+      price: Float!
+      releaseYear: Int
+      rating: Float
+      inStock: Boolean!
   }
 `
 
@@ -19,17 +37,35 @@ const typeDefs = `
 
 const resolvers = {
     Query: {
-        hello() {
-            return 'This is my first query!'
+        id() {
+            return 'abc123'
         },
         name() {
             return 'admin'
         },
-        email() {
-            return 'email'
+        age() {
+            return 25
         },
-        location() {
-            return 'location'
+        employed() {
+            return true
+        },
+        gpa() {
+            return null
+        },
+        title() {
+            return 'Title here'
+        },
+        price() {
+            return 800
+        },
+        releaseYear() {
+            return 1995
+        },
+        rating() {
+            return null;
+        },
+        inStock() {
+            return false
         },
     }
 }
