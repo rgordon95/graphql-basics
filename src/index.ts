@@ -50,29 +50,34 @@ type Comment {
     id: ID!
     body: String!
     author: User!
+    post: Post!
 }
 
 `
 const comments = [
     {
-        id: 5555,
+        id: '5555',
         body: 'first',
         author: '1',
+        post: '2341',
     },
     {
-        id: 5552,
+        id: '5552',
         body: 'snd',
         author: '2',
+        post: '2341',
     },
     {
-        id: 5553,
+        id: '5553',
         body: 'not first',
         author: '2',
+        post: '2341',
     },
     {
-        id: 554,
+        id: '554',
         body: 'third',
         author: '3',
+        post: '32324',
     },
 ]
 
@@ -162,23 +167,32 @@ const resolvers = {
     comments(parent, args, ctx, info) {
         if (!args.query) {
             return comments;
-        }
-    },
-
+    }
+},
     },
     Post: {
         author(parent, args, ctx, info) {
             return users.find((user) => {
                 return user.id === parent.author
         })
-      }
+      },
+      comments(parent, args, ctx, info) {
+        return comments.filter((comment) => {
+            return comment.post === parent.id 
+        })
+    },
     },
     Comment: {
         author(parent, args, ctx, info) {
             return users.find((user) => {
                 return user.id === parent.author
         })
-      }
+      },
+        post(parent, args, ctx, info) {
+            return posts.find((post) => {
+                return post.id === parent.post
+            })
+        },
     },
      User: {
     posts(parent, args, ctx, info) {
