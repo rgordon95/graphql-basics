@@ -45,19 +45,19 @@ type Post {
 `
 
 const posts = [{
-    id: '1',
+    id: '2341',
     title: 'title 1s',
     body: 'this is the bodyu',
     published: true,
 },
 {
-    id: '12',
+    id: '122342342',
     title: '2222',
     body: 'this is  bodyu',
     published: false,
 },
 {
-    id: '3',
+    id: '32324',
     title: 'Rich3',
     body: ' is the bodyu',
     published: true,
@@ -106,15 +106,14 @@ const resolvers = {
          posts(parent, args, ctx, info) {
             if (!args.query) {
                 return posts;
-            } else {
-                return posts.filter((post) => {
-                    if (post.title.toLowerCase().includes(args.query.toLowerCase()) 
-                    || post.body.toLowerCase().includes(args.query.toLowerCase())) {
-                    return post;      
-                    }
-                })
             }
-        },
+            
+            return posts.filter((post) => {
+                const isTitleMatch = post.title.toLowerCase().includes(args.query.toLowerCase());
+                 const isBodyMatch = post.body.toLowerCase().includes(args.query.toLowerCase());
+                return isTitleMatch || isBodyMatch;  
+        })
+    },
          users(parent, args, ctx, info) {
              if (!args.query) {
                  return users;
