@@ -19,54 +19,32 @@ Float,
 */
 
 const typeDefs = `
-  type Query {
-      id: ID!
-      name: String!
-      age: Int!
-      employed: Boolean!
-      gpa: Float
-      title: String!
-      price: Float!
-      releaseYear: Int
-      rating: Float
-      inStock: Boolean!
+
+type Query {
+    me: User!
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    age: Int
   }
+
 `
 
 // Resolvers (operations)
 
 const resolvers = {
     Query: {
-        id() {
-            return 'abc123'
-        },
-        name() {
-            return 'admin'
-        },
-        age() {
-            return 25
-        },
-        employed() {
-            return true
-        },
-        gpa() {
-            return null
-        },
-        title() {
-            return 'Title here'
-        },
-        price() {
-            return 800
-        },
-        releaseYear() {
-            return 1995
-        },
-        rating() {
-            return null;
-        },
-        inStock() {
-            return false
-        },
+         me() {
+             return {
+                 id: 'qijioa',
+                 name: 'Richard',
+                 email: 'rich@mail.com',
+                 age: '25',
+             }
+         }
     }
 }
 
