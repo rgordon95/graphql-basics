@@ -2,9 +2,9 @@
   "name": "graphql-basics",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "nodemon src/index.js --exec babel-node",
+    "start": "nodemon src/index.ts --exec babel-node",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Richard Gordon / Udemy Course by Andrew",

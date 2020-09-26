@@ -22,7 +22,9 @@ const typeDefs = `
 
 type Query {
     me: User!
+    post: Post!
 }
+
 
 type User {
     id: ID!
@@ -30,6 +32,13 @@ type User {
     email: String!
     age: Int
   }
+
+type Post {
+    id: ID!
+    title: String!
+    body: String!
+    published: Boolean!
+}
 
 `
 
@@ -44,7 +53,15 @@ const resolvers = {
                  email: 'rich@mail.com',
                  age: '25',
              }
-         }
+         },
+         post() {
+              return {
+                 title: 'titlee',
+                 body: 'first post',
+                 published: true,
+                 id: '1'
+            }
+         },
     }
 }
 
