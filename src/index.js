@@ -1,8 +1,44 @@
+import { GraphQLServer } from 'graphql-yoga';
 import { locales } from './locales';
-import { addFunction, subtractFunction } from './math';
 
 console.log(locales.logs.initializing);
 console.log(locales.userMessaging.getGreeting('admin'));
 
-console.log(addFunction(4, 6));
-console.log(subtractFunction(7, 3));
+// Type Definitions (schema)
+
+const typeDefs = `
+  type Query {
+      hello: String!
+      name: String!
+      email: String!
+      location: String
+  }
+`
+
+// Resolvers (operations)
+
+const resolvers = {
+    Query: {
+        hello() {
+            return 'This is my first query!'
+        },
+        name() {
+            return 'admin'
+        },
+        email() {
+            return 'email'
+        },
+        location() {
+            return 'location'
+        },
+    }
+}
+
+const server = new GraphQLServer({
+    typeDefs,
+    resolvers,
+});
+
+server.start(() => {
+    console.log(locales.logs.initialized);
+})

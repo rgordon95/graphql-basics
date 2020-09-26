@@ -1,5 +1,6 @@
 export const locales = {
     logs: {
+        initialized: 'graphql initialized!',
         initializing: 'graphql initializing...'
     },
     userMessaging: {
