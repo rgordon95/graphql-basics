@@ -21,9 +21,10 @@ Float,
 const typeDefs = `
 
 type Query {
-    users: [User!]!
+    users(query: String): [User!]!
     me: User!
     post: Post!
+    posts(query: String): [Post!]!
 }
 
 
@@ -42,6 +43,26 @@ type Post {
 }
 
 `
+
+const posts = [{
+    id: '1',
+    title: 'title 1s',
+    body: 'this is the bodyu',
+    published: true,
+},
+{
+    id: '12',
+    title: '2222',
+    body: 'this is  bodyu',
+    published: false,
+},
+{
+    id: '3',
+    title: 'Rich3',
+    body: ' is the bodyu',
+    published: true,
+},
+]
 
 const users = [{
     id: '1',
@@ -82,8 +103,26 @@ const resolvers = {
                  id: '1'
             }
          },
+         posts(parent, args, ctx, info) {
+            if (!args.query) {
+                return posts;
+            } else {
+                return posts.filter((post) => {
+                    if (post.title.toLowerCase().includes(args.query.toLowerCase()) 
+                    || post.body.toLowerCase().includes(args.query.toLowerCase())) {
+                    return post;      
+                    }
+                })
+            }
+        },
          users(parent, args, ctx, info) {
-            return users;
+             if (!args.query) {
+                 return users;
+             } else {
+                 return users.filter((user) => {
+                     return user.name.toLowerCase().includes(args.query.toLowerCase())
+                 })
+             }
          },
 
     }
