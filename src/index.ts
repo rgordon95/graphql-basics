@@ -21,6 +21,7 @@ Float,
 const typeDefs = `
 
 type Query {
+    greeting(name: String): String!
     me: User!
     post: Post!
 }
@@ -46,6 +47,9 @@ type Post {
 
 const resolvers = {
     Query: {
+        greeting(p, args, ctx, info) {
+            return `Hello ${args.name}`
+        },
          me() {
              return {
                  id: 'qijioa',
