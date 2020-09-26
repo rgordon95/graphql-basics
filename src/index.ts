@@ -27,12 +27,12 @@ type Query {
     posts(query: String): [Post!]!
 }
 
-
 type User {
     id: ID!
     name: String!
     email: String!
     age: Int
+    posts: [Post!]!
   }
 
 type Post {
@@ -40,6 +40,14 @@ type Post {
     title: String!
     body: String!
     published: Boolean!
+    author: User!
+    comments: [Comment]!
+}
+
+type Comment {
+    id: ID!
+    author: User!
+    body: String!
 }
 
 `
@@ -49,18 +57,21 @@ const posts = [{
     title: 'title 1s',
     body: 'this is the bodyu',
     published: true,
+    author: '1',
 },
 {
     id: '122342342',
     title: '2222',
     body: 'this is  bodyu',
     published: false,
+    author: '2',
 },
 {
     id: '32324',
     title: 'Rich3',
     body: ' is the bodyu',
     published: true,
+    author: '3',
 },
 ]
 
@@ -100,7 +111,8 @@ const resolvers = {
                  title: 'titlee',
                  body: 'first post',
                  published: true,
-                 id: '1'
+                 id: '1',
+                 author: '1',
             }
          },
          posts(parent, args, ctx, info) {
@@ -124,7 +136,21 @@ const resolvers = {
              }
          },
 
+    },
+    Post: {
+        author(parent, args, ctx, info) {
+            return users.find((user) => {
+                return user.id === parent.author
+        })
+      }
+    },
+     User: {
+    posts(parent, args, ctx, info) {
+        return posts.filter((post) => {
+            return post.author === parent.id 
+        })
     }
+  }
 }
 
 const server = new GraphQLServer({
