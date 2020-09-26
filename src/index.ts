@@ -21,11 +21,9 @@ Float,
 const typeDefs = `
 
 type Query {
-    greeting(name: String): String!
+    users: [User!]!
     me: User!
     post: Post!
-    add(numbers: [Float!]): Float!
-    grades: [Int!]!
 }
 
 
@@ -45,13 +43,29 @@ type Post {
 
 `
 
+const users = [{
+    id: '1',
+    name: 'Rich',
+    age: 25,
+    email: 'rich@gordonholdingsco.com',
+},
+{
+    id: '2',
+    name: 'Joe',
+    age: 22,
+    email: 'joe@gordonholdingsco.com',
+},
+{
+    id: '3',
+    name: 'Spencer',
+    email: 'spencer@gordonholdingsco.com',
+},
+]
+
 // Resolvers (operations)
 
 const resolvers = {
     Query: {
-        greeting(p, args, ctx, info) {
-            return `Hello ${args.name}`
-        },
          me() {
              return {
                  id: 'qijioa',
@@ -68,18 +82,10 @@ const resolvers = {
                  id: '1'
             }
          },
-         add(p, args) {
-             if (args.numbers.length === 0 ) {
-                return 0;
-            }
+         users(parent, args, ctx, info) {
+            return users;
+         },
 
-            return args.numbers.reduce((accumulator, currentValue) => {
-                return accumulator + currentValue
-            });
-         },
-         grades(p, args, ctx, info) {
-            return [99, 100, 80, 92, 102]
-         },
     }
 }
 
