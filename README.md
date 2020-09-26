@@ -9,5 +9,6 @@ prerequisites:
 
 ### Install
 
-1. ```npm install```
-2. ```npm start```
+1. Run ```npm install```
+2. Run ```npm start```
+3. Visit [graphql playground](https://graphql-demo.mead.io/)

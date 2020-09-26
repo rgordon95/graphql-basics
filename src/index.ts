@@ -25,6 +25,7 @@ type Query {
     me: User!
     post: Post!
     add(a: Float!, b: Float!): Float!
+    grades: [Int!]!
 }
 
 
@@ -69,6 +70,9 @@ const resolvers = {
          },
          add(p, args) {
             return args.a + args.b
+         },
+         grades(p, args, ctx, info) {
+            return [99, 100, 80, 92, 102]
          },
     }
 }
