@@ -121,8 +121,9 @@ deletePost(parents, args, { db, pubsub }, info) {
     return post;
 
 },
-updatePost(parents, { id, data }, { db }, info ) {
+updatePost(parents, { id, data }, { db, pubsub }, info ) {
     const post = db.posts.find((post) => post.id === id)
+    const originalPost = { ...post }
 
     if (!post) {
         throw new Error(locales.errors.postNotFound);
@@ -138,7 +139,31 @@ updatePost(parents, { id, data }, { db }, info ) {
 
     if (typeof data.published === 'boolean') {
         post.published = data.published
+
+        if (originalPost.published && !post.published) {
+            pubsub.publish('post', {
+                post: {
+                    mutation: Constants.MutationTypes.DELETED,
+                    data: originalPost
+                }
+            })
+        } else if (!originalPost.published && post.published) {
+            pubsub.publish('post', {
+                post: {
+                    mutation: Constants.MutationTypes.CREATED,
+                    data: post
+                }
+            })
+        }
+    } else if (post.published) {
+        pubsub.publish('post', {
+            post: {
+                mutation: Constants.MutationTypes.UPDATED,
+                data: post
+            }
+        })
     }
+
 
     return post
 },
