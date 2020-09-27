@@ -189,7 +189,7 @@ createComment(parent, args, { db, pubsub }, info) {
     }
 
     db.comments.push(comment);
-    pubsub.publish('comment', {
+    pubsub.publish(`comment ${args.data.post}`, {
      mutation: Constants.MutationTypes.CREATED,
      data: comment   
     });
@@ -197,7 +197,7 @@ createComment(parent, args, { db, pubsub }, info) {
     return comment;
 
 },
-deleteComment(parent, args, { db }, info) {
+deleteComment(parent, args, { db, pubsub }, info) {
     const commentIndex = db.comments.findIndex((comment) => comment.id === args.id);
 
     if (commentIndex === -1) {
@@ -206,9 +206,16 @@ deleteComment(parent, args, { db }, info) {
 
     const deletedComment = db.comments.splice(commentIndex, 1);
 
+
+    db.comments.push(comment);
+    pubsub.publish(`comment ${deletedComment[0].post}`, {
+     mutation: Constants.MutationTypes.DELETED,
+     data: comment   
+    });
+
     return deletedComment[0];
 },
-updateComment(parent, args, { db }, info ) {
+updateComment(parent, args, { db, pubsub }, info ) {
     const { id, body } = args;
     const comment = db.comments.find((comment) => comment.id === id)
 
@@ -219,6 +226,12 @@ updateComment(parent, args, { db }, info ) {
     if (typeof body === 'string') {
         comment.body = body
     }
+
+    db.comments.push(comment);
+    pubsub.publish(`comment ${comment.post}`, {
+     mutation: Constants.MutationTypes.UPDATED,
+     data: comment   
+    });
 
     return comment
 },
