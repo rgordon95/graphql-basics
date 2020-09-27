@@ -31,7 +31,9 @@ type Query {
 
 type Mutation {
     createUser(data: CreateUserInput): User!
+    deleteUser(id: ID!): User!
     createPost(data: CreatePostInput ): Post!
+    deletePost(id: ID!): Post!
     createComment(data: CreateCommentInput): Comment!
 }
 
@@ -81,7 +83,7 @@ type Comment {
 }
 
 `
-const comments = [
+let comments = [
     {
         id: '5555',
         body: 'first',
@@ -108,7 +110,7 @@ const comments = [
     },
 ]
 
-const posts = [{
+let posts = [{
     id: '2341',
     title: 'title 1s',
     body: 'this is the bodyu',
@@ -131,7 +133,7 @@ const posts = [{
 },
 ]
 
-const users = [{
+let users = [{
     id: '1',
     name: 'Rich',
     age: 25,
@@ -250,6 +252,31 @@ const resolvers = {
 
         return user;
     },
+    deleteUser(parent, args, ctx, info) {
+        const userIndex = users.findIndex((user) => user.id === args.id)
+
+        if (userIndex === -1) {
+            throw new Error(locales.errors.userNotFound)
+        }
+
+        const deletedUsers = users.splice(userIndex, 1);
+
+        posts = posts.filter((post) => {
+            const match = post.author === args.id
+
+            if (match) {
+                comments = comments.filter((comment) => {
+                    return comment.post !== post.id
+                })
+            }
+
+            return !match;
+        })
+
+        comments = comments.filter((comment) => comment.author !== args.id)
+
+        return deletedUsers[0]
+    },
     createPost(parents, args, ctx, info) {
         const userExists = users.some((user) => user.id === args.data.author)
 
@@ -265,6 +292,20 @@ const resolvers = {
         posts.push(post);
 
         return post;
+    },
+    deletePost(parents, args, ctx, info) {
+        const postIndex = posts.findIndex((post) => post.id === args.id);
+
+        if (postIndex === -1) {
+            throw new Error(locales.errors.postNotFound);
+        }
+
+        const deletedPost = posts.splice(postIndex, 1);
+
+        comments = comments.filter((comment) => comment.post !== args.id)
+
+        return deletedPost[0];
+
     },
     createComment(parent, args, ctx, info) {
         const userExists = users.some((user) => user.id === args.data.author);
