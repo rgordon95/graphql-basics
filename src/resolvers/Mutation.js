@@ -160,6 +160,20 @@ deleteComment(parent, args, { db }, info) {
 
     return deletedComment[0];
 },
+updateComment(parent, args, { db }, info ) {
+    const { id, body } = args;
+    const comment = db.comments.find((comment) => comment.id === id)
+
+    if (!comment) {
+        throw new Error(locales.errors.commentNotFound)
+    }
+
+    if (typeof body === 'string') {
+        comment.body = body
+    }
+
+    return comment
+},
 };
 
 export { Mutation as default }
