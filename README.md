@@ -1,11 +1,11 @@
 # GraphQL Basics
 
-This repo was made to explore graphQL with node and apollo
+This repo was made to explore graphQL with node and apollo following along with [this udemy course](https://www.udemy.com/course/graphql-bootcamp/)
 
 ## Getting Started
 
 prerequisites: 
-*Node v8+ / NPM
+* Node v8+ / NPM
 
 ### Install
 
@@ -15,7 +15,7 @@ prerequisites:
 
 # Dependency Notes
 
-graphql-yoga - for running the server
-Nodemon  - for server refresh on file change during development
-babel[plugins] - for TS/ES7+ etc.
-uuid - for random id generation
+* graphql-yoga - for running the server
+* Nodemon  - for server refresh on file change during development
+* babel[plugins] - for TS/ES7+ etc.
+* uuid - for random id generation
