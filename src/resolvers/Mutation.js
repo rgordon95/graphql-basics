@@ -105,20 +105,20 @@ deletePost(parents, args, { db, pubsub }, info) {
         throw new Error(locales.errors.postNotFound);
     }
 
-    const deletedPost = db.posts.splice(postIndex, 1);
+    const [post] = db.posts.splice(postIndex, 1);
 
     db.comments = db.comments.filter((comment) => comment.post !== args.id)
 
-    if (deletedPost[0].published) {
+    if (post.published) {
         pubsub.publish('post', {
             post: {
                 mutation: Constants.MutationTypes.DELETED,
-                data: deletedPost[0]
+                data: post
             }
         });
     }
 
-    return deletedPost[0];
+    return post;
 
 },
 updatePost(parents, { id, data }, { db }, info ) {
