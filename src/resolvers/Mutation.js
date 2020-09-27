@@ -189,7 +189,10 @@ createComment(parent, args, { db, pubsub }, info) {
     }
 
     db.comments.push(comment);
-    pubsub.publish(`comment ${args.data.post}, ${ comment }`)
+    pubsub.publish('comment', {
+     mutation: Constants.MutationTypes.CREATED,
+     data: comment   
+    });
 
     return comment;
 
