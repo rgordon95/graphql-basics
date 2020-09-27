@@ -1,5 +1,6 @@
 import uuidv4 from 'uuid/v4';
 import { locales } from '../locales';
+import { Constants } from '../constants';
 
 const Mutation = {
 createUser(parent, args, { db }, info) {
@@ -87,12 +88,17 @@ createPost(parent, args, { db, pubsub }, info) {
     db.posts.push(post);
 
     if (args.data.published) {
-        pubsub.publish(`post ${post}`)
+        pubsub.publish('post', {
+            post: {
+                mutation: Constants.MutationTypes.CREATED,
+                data: post
+            }
+        });
     }
     
     return post;
 },
-deletePost(parents, args, { db }, info) {
+deletePost(parents, args, { db, pubsub }, info) {
     const postIndex = db.posts.findIndex((post) => post.id === args.id);
 
     if (postIndex === -1) {
@@ -102,6 +108,15 @@ deletePost(parents, args, { db }, info) {
     const deletedPost = db.posts.splice(postIndex, 1);
 
     db.comments = db.comments.filter((comment) => comment.post !== args.id)
+
+    if (deletedPost[0].published) {
+        pubsub.publish('post', {
+            post: {
+                mutation: Constants.MutationTypes.DELETED,
+                data: deletedPost[0]
+            }
+        });
+    }
 
     return deletedPost[0];
 
