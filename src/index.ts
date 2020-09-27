@@ -35,6 +35,7 @@ type Mutation {
     createPost(data: CreatePostInput ): Post!
     deletePost(id: ID!): Post!
     createComment(data: CreateCommentInput): Comment!
+    deleteComment(id: ID!): Comment!
 }
 
 
@@ -332,6 +333,17 @@ const resolvers = {
 
         return comment;
     
+    },
+    deleteComment(parent, args, ctx, info) {
+        const commentIndex = comments.findIndex((comment) => comment.id === args.id);
+
+        if (commentIndex === -1) {
+            throw new Error(locales.errors.commentNotFound);
+        }
+
+        const deletedComment = comments.splice(commentIndex, 1);
+
+        return deletedComment[0];
     },
   }
 }
