@@ -1,4 +1,5 @@
 import uuidv4 from 'uuid/v4';
+import { locales } from '../locales';
 
 const Mutation = {
 createUser(parent, args, { db }, info) {
@@ -100,6 +101,27 @@ deletePost(parents, args, { db }, info) {
 
     return deletedPost[0];
 
+},
+updatePost(parents, { id, data }, { db }, info ) {
+    const post = db.posts.find((post) => post.id === id)
+
+    if (!post) {
+        throw new Error(locales.errors.postNotFound);
+    }
+
+    if (typeof data.title === 'string') {
+        post.title = data.title
+    }
+    
+    if (typeof data.body === 'string') {
+        post.body = data.body
+    }
+
+    if (typeof data.published === 'boolean') {
+        post.published = data.published
+    }
+
+    return post
 },
 createComment(parent, args, { db }, info) {
     const userExists = db.users.some((user) => user.id === args.data.author);
